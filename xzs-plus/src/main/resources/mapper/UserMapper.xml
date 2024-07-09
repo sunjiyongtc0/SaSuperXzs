@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mind.xzs.mapper.UserMapper">
+
+
+
+    <select id="userPage" resultType="com.mind.xzs.domain.UserEntity" parameterType="com.mind.xzs.domain.UserEntity">
+        SELECT
+        id, user_uuid, user_name, password, real_name, age, sex, birth_day, user_level, phone,
+        role, status, image_path, create_time, modify_time, last_active_time, deleted, wx_open_id
+        FROM t_user
+        <where>
+            and deleted=0
+            <if test="userName != null and userName != ''">
+                and user_name like concat('%',#{userName},'%')
+            </if>
+            <if test="role != null ">
+                and role= #{role}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="getUserByUserName" resultType="com.mind.xzs.domain.UserEntity">
+        select
+       id, user_uuid, user_name, password, real_name, age, sex, birth_day, user_level, phone,
+        role, status, image_path, create_time, modify_time, last_active_time, deleted, wx_open_id
+        FROM t_user
+        where deleted=0 and user_name=#{value} limit 1
+    </select>
+
+
+    <select id="selectByUserName"  resultType="com.mind.xzs.domain.other.KeyValue">
+		SELECT  id as value,user_name as name
+		from t_user
+		where deleted=0 and user_name like concat('%',#{value},'%')
+		limit 5
+  </select>
+
+    <select id="selectByWxOpenId" parameterType="java.lang.String" resultType="com.mind.xzs.domain.UserEntity">
+        select
+        id, user_uuid, user_name, password, real_name, age, sex, birth_day, user_level, phone,
+        role, status, image_path, create_time, modify_time, last_active_time, deleted, wx_open_id
+        from t_user
+        where deleted=0 and  wx_open_id = #{wxOpenId}
+        limit 1
+    </select>
+</mapper>
